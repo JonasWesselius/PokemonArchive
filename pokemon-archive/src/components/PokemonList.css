@@ -1,0 +1,88 @@
+.pokemon-list-container {
+    width: 100%;
+    margin: 0 auto;
+    background-color: rgba(204, 229, 255, 0.3); /* RGBA color with 30% opacity */
+}
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  .searchbar {
+    background-color: #CCE5FF; 
+    width: 200px; 
+    height: 30px; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 5px; 
+  }
+  
+  .searchbar input[type="text"] {
+    width: 100%; 
+    height: 100%; 
+    background-color: transparent; 
+    border: none; 
+    outline: none;
+  }
+  
+  .searchbar input[type="text"]::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  .filter-select {
+    background-color: #CCE5FF; 
+    border: none;
+    border-radius: 5px; 
+    padding: 5px; 
+    width: 150px; 
+    height: 30px; 
+  }
+  
+  .filter-select option {
+    background-color: #CCE5FF; 
+    color: black; 
+  }
+  
+  .filter-select:focus {
+    outline: none; 
+  }
+  .order-by {
+    display: flex;
+    align-items: center;
+  }
+
+  .order-by span {
+    margin: 10px;
+  }
+
+.sort-button {
+    background-color: #CCE5FF; 
+    border: none;
+    border-radius: 5px; 
+    padding: 5px; 
+    width: 100px; 
+    height: 30px; 
+  }
+  .pokemon-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 0; 
+  }
+  
+  .pokemon-card {
+    flex: 0 0 auto; 
+    margin: 0; 
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  button {
+    margin: 0 5px;
+  }
+  

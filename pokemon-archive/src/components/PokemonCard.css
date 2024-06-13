@@ -1,0 +1,32 @@
+.pokemon-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    width: 23%;  /* Adjust the width to fit 4 cards per row with gaps */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-sizing: border-box;  /* Ensure padding is included in the width */
+  }
+  
+  .pokemon-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .pokemon-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .pokemon-card.collected {
+    border-color: green;
+    background-color: #28A745;
+  }
+  
+  .pokemon-card h3 {
+    font-size: 1.2em;
+    text-align: center;
+  }
+  
