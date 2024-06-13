@@ -7,12 +7,13 @@ import './PokemonList.css';
 
 const PokemonList = () => {
   const [cards, setCards] = useState([]);
+  const [allCards, setAllCards] = useState([]); // To store all fetched cards
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [filterType, setFilterType] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const pageSize = 50; 
+  const pageSize = 500; // Increase the initial page size to fetch a large number of cards
   const { collected, toggleCollected } = useContext(CollectedContext);
 
   const fetchCards = useCallback(() => {
@@ -22,8 +23,8 @@ const PokemonList = () => {
       }
     })
     .then(response => {
-      setCards(prevCards => [...prevCards, ...response.data.data]);
-      console.log(response.data.data)
+      setAllCards(prevCards => [...prevCards, ...response.data.data]); // Store all fetched cards
+      setCards(prevCards => [...prevCards, ...response.data.data]); // Update the visible cards
       if (response.data.data.length < pageSize) {
         setHasMore(false);
       }
@@ -57,10 +58,13 @@ const PokemonList = () => {
     setFilterType(event.target.value.toLowerCase());
   };
 
-  const filteredCards = cards.filter(card =>
-    card.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (filterType === '' || card.types?.map(type => type.toLowerCase()).includes(filterType))
-  );
+  useEffect(() => {
+    const filtered = allCards.filter(card =>
+      card.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filterType === '' || card.types?.map(type => type.toLowerCase()).includes(filterType))
+    );
+    setCards(filtered);
+  }, [searchTerm, filterType, allCards]);
 
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -98,11 +102,10 @@ const PokemonList = () => {
           <button className="sort-button" onClick={handleSort}>
             Name {sortOrder === 'asc' ? 'Asc' : 'Desc'}
           </button>
-          {/* Add an arrow for the dropdown */}
         </div>
       </div>
       <div className="pokemon-list">
-        {filteredCards.map((card) => (
+        {cards.map((card) => (
           <PokemonCard 
             key={card.id} 
             name={card.name} 
