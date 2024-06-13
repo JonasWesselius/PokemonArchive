@@ -2,6 +2,31 @@
     width: 100%;
     margin: 0 auto;
     background-color: rgba(204, 229, 255, 0.3); /* RGBA color with 30% opacity */
+    position: relative;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: none; /* Initially hidden */
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.back-to-top.active {
+  display: block; /* Show when active */
+}
+
+.back-to-top img {
+  width: 30px; /* Adjust size as needed */
+  height: auto;
+  transform: translateY(0); /* Default position */
+  transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.back-to-top.flipped img {
+  transform: translateY(-100%) rotate(180deg); /* Flipped vertically and rotated */
 }
 
   .controls {
@@ -36,6 +61,13 @@
     padding: 5px; 
     width: 150px; 
     height: 30px; 
+    appearance: none; /* Hides the default arrow */
+    -webkit-appearance: none; /* Hides the default arrow in Safari */
+    -moz-appearance: none; /* Hides the default arrow in Firefox */
+    background-image: url('../images/down-arrow.svg'); /* Path to the custom arrow icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
   }
   
   .filter-select option {
@@ -46,23 +78,40 @@
   .filter-select:focus {
     outline: none; 
   }
+  
+  
   .order-by {
     display: flex;
     align-items: center;
   }
-
+  
   .order-by span {
     margin: 10px;
   }
-
-.sort-button {
+  
+  .sort-button {
     background-color: #CCE5FF; 
     border: none;
     border-radius: 5px; 
     padding: 5px; 
     width: 100px; 
     height: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
   }
+  
+  .sort-button img {
+    width: 12px; /* Adjust size as needed */
+    transition: transform 0.3s;
+  }
+  
+  .sort-button.asc img {
+    transform: rotate(180deg);
+  }
+  
   .pokemon-list {
     display: flex;
     flex-wrap: wrap;

@@ -1,78 +1,79 @@
 .header {
-    background-color: #CCE5FF;
-    width: 100%;
-  }
-  
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    max-width: 70%;
-    margin: 0 auto; /* Horizontally center the header content */
-  }
-  
-  .logo-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo {
-    width: 50px;
-    height: auto;
-  }
-  
-  .title {
-    margin-left: 10px;
-    font-weight: bold;
-  }
-  
-  /* The rest of your styles remain unchanged */
-  
-  
-  .title {
-    margin-left: 10px;
-    font-weight: bold;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    align-items: center;
-  }
-  
-  nav ul li {
-    margin-right: 20px;
-    font-weight: bold;
-  }
-  
-  nav ul li.active a {
-    border-bottom: 3px solid #9ECEFF; /* Light blue underline for active link */
-  }
-  
-  nav ul li:hover {
-    background-color: #9ECEFF; /* Change background color on hover */
-  }
-  
-  nav ul li a {
-    text-decoration: none; /* Remove underline from links */
-  }
-  
-  .indicator {
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    height: 3px;
-    width: calc(100% / 3);
-    background-color: transparent;
-    transition: background-color 0.3s;
-  }
-  
-  .indicator.collection {
-    left: calc(100% / 3);
-  }
-  
-  .indicator.archive {
-    left: 0;
-  }
-  
+  background-color: #CCE5FF;
+  width: 100%;
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure it stays on top of other content */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:0px 20px;
+  max-width: 70%;
+  margin: 0 auto; /* Horizontally center the header content */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 50px;
+  height: auto;
+}
+
+.title {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* The rest of your styles remain unchanged */
+
+nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-right: 20px;
+  font-weight: bold;
+  padding: 10px 0; /* Add padding to make hover effect noticeable */
+}
+
+nav ul li.active a {
+  border-bottom: 3px solid #9ECEFF; /* Light blue underline for active link */
+}
+
+nav ul li:hover {
+  background-color: #9ECEFF; /* Change background color on hover */
+}
+
+nav ul li a {
+  text-decoration: none; /* Remove underline from links */
+  color: black; /* Ensure links are visible */
+}
+
+.indicator {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  height: 3px;
+  width: calc(100% / 3);
+  background-color: transparent;
+  transition: background-color 0.3s;
+}
+
+.indicator.collection {
+  left: calc(100% / 3);
+}
+
+.indicator.archive {
+  left: 0;
+}

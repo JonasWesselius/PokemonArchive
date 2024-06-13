@@ -4,17 +4,20 @@ import PokemonCard from './PokemonCard';
 import { CollectedContext } from '../context/CollectedContext';
 import { useInView } from 'react-intersection-observer';
 import './PokemonList.css';
+import downArrow from '../images/down-arrow.svg'; // Adjust the path based on your project structure
 
 const PokemonList = () => {
   const [cards, setCards] = useState([]);
-  const [allCards, setAllCards] = useState([]); // To store all fetched cards
+  const [allCards, setAllCards] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [filterType, setFilterType] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const pageSize = 500; // Increase the initial page size to fetch a large number of cards
+  const pageSize = 500;
   const { collected, toggleCollected } = useContext(CollectedContext);
+  const [showBackToTop, setShowBackToTop] = useState(false); // State to manage when to show back to top arrow
+  const [flippedArrow, setFlippedArrow] = useState(false); // State to manage arrow flip
 
   const fetchCards = useCallback(() => {
     axios.get(`https://api.pokemontcg.io/v2/cards?page=${page}&pageSize=${pageSize}`, {
@@ -23,8 +26,8 @@ const PokemonList = () => {
       }
     })
     .then(response => {
-      setAllCards(prevCards => [...prevCards, ...response.data.data]); // Store all fetched cards
-      setCards(prevCards => [...prevCards, ...response.data.data]); // Update the visible cards
+      setAllCards(prevCards => [...prevCards, ...response.data.data]);
+      setCards(prevCards => [...prevCards, ...response.data.data]);
       if (response.data.data.length < pageSize) {
         setHasMore(false);
       }
@@ -77,6 +80,27 @@ const PokemonList = () => {
     }
   }, [inView, hasMore]);
 
+  // Effect to show back to top arrow when scrolled past the search bar
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const searchBarOffset = document.querySelector('.searchbar').offsetTop;
+      setShowBackToTop(scrollTop > searchBarOffset);
+      setFlippedArrow(scrollTop > searchBarOffset); // Flip arrow when scrolled past the search bar
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <div className="pokemon-list-container">
       <div className="controls">
@@ -84,23 +108,23 @@ const PokemonList = () => {
             <input type="text" placeholder="Search..." value={searchTerm} onChange={handleSearch} />
         </div>
         <select className="filter-select" onChange={handleFilter}>
-        <option value="">All Types</option>
-        <option value="Grass">Grass</option>
-        <option value="Fire">Fire</option>
-        <option value="Water">Water</option>
-        <option value="Darkness">Dark</option>
-        <option value="Psychic">Psychic</option>
-        <option value="Colorless">Normal</option>
-        <option value="Fighting">Fighting</option>
-        <option value="Lightning">Electric</option>
-        <option value="Metal">Steel</option>
-        <option value="Fairy">Fairy</option>
-        <option value="Dragon">Dragon</option>
+          <option value="">All Types</option>
+          <option value="Grass">Grass</option>
+          <option value="Fire">Fire</option>
+          <option value="Water">Water</option>
+          <option value="Darkness">Dark</option>
+          <option value="Psychic">Psychic</option>
+          <option value="Colorless">Normal</option>
+          <option value="Fighting">Fighting</option>
+          <option value="Lightning">Electric</option>
+          <option value="Metal">Steel</option>
+          <option value="Fairy">Fairy</option>
+          <option value="Dragon">Dragon</option>
         </select>
         <div className="order-by">
           <span>Order By:</span>
           <button className="sort-button" onClick={handleSort}>
-            Name {sortOrder === 'asc' ? 'Asc' : 'Desc'}
+            Name
           </button>
         </div>
       </div>
@@ -120,6 +144,10 @@ const PokemonList = () => {
           Loading more cards...
         </div>
       )}
+      {/* Back to top arrow */}
+      <div className={`back-to-top ${showBackToTop ? 'active' : ''} ${flippedArrow ? 'flipped' : ''}`} onClick={scrollToTop}>
+        <img src={downArrow} alt="Back to Top" />
+      </div>
     </div>
   );
 };
