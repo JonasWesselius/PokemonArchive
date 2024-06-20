@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import './Header.css';  // Import CSS file
+import './Header.css'; 
 import logo from '../images/PA Logo.png';
 
 const Header = () => {
@@ -19,8 +19,8 @@ const Header = () => {
           <img src={logo} alt="Pokemon Archive Logo" className="logo" />
           <h1 className="title">Pokemon Archive</h1>
         </div>
-        <nav>
-          <ul>
+        <nav className="nav-container">
+          <ul className="nav-list">
               <li className={!isCollectionPage ? 'active' : ''}>
                   <Link to="/" onMouseEnter={handleHover} onMouseLeave={handleHover}>
                   Archive
