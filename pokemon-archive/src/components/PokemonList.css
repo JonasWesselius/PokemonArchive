@@ -1,16 +1,17 @@
 .pokemon-list-container {
-    width: 100%;
-    margin: 0 auto;
-    background-color: rgba(204, 229, 255, 0.3); /* RGBA color with 30% opacity */
-    position: relative;
+  width: 100%;
+  margin: 0 auto;
+  background-color: rgba(204, 229, 255, 0.3);
+  position: relative;
 }
 
 .back-to-top {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: -3vh;
+  right: 10vw; /* Position it 20px from the right edge */
   display: none; /* Initially hidden */
   cursor: pointer;
+  transition: transform 0.5s ease; /* Smooth transition */
   z-index: 1000; /* Ensure it's above other content */
 }
 
@@ -22,7 +23,10 @@
   width: 30px; /* Adjust size as needed */
   height: auto;
   transform: translateY(0); /* Default position */
-  transition: transform 0.3s ease; /* Smooth transition */
+  transition: transform 0.5s ease; /* Smooth transition */
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #CCE5FF;
 }
 
 .back-to-top.flipped img {
@@ -58,9 +62,9 @@
     background-color: #CCE5FF; 
     border: none;
     border-radius: 5px; 
-    padding: 5px; 
+    padding: 10px; 
     width: 150px; 
-    height: 30px; 
+    height: 40px; 
     appearance: none; /* Hides the default arrow */
     -webkit-appearance: none; /* Hides the default arrow in Safari */
     -moz-appearance: none; /* Hides the default arrow in Firefox */
@@ -93,9 +97,9 @@
     background-color: #CCE5FF; 
     border: none;
     border-radius: 5px; 
-    padding: 5px; 
+    padding: 10px; 
     width: 100px; 
-    height: 30px; 
+    height: 40px; 
     display: flex;
     align-items: center;
     justify-content: center;

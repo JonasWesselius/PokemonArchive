@@ -1,4 +1,11 @@
-.container {
-  width: 70%;
-  margin: 0 auto;
+/* App.css */
+
+body {
+  background-image: url('images/LightBackground.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-color 0.3s ease;
+  margin: 0;
+  padding: 0;
 }

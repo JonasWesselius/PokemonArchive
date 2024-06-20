@@ -7,67 +7,97 @@ import './PokemonList.css';
 import downArrow from '../images/down-arrow.svg'; // Adjust the path based on your project structure
 
 const PokemonList = () => {
-  const [cards, setCards] = useState([]);
   const [allCards, setAllCards] = useState([]);
+  const [filteredCards, setFilteredCards] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
   const [filterType, setFilterType] = useState('');
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const pageSize = 500;
+  const pageSize = 50;
   const { collected, toggleCollected } = useContext(CollectedContext);
   const [showBackToTop, setShowBackToTop] = useState(false); // State to manage when to show back to top arrow
   const [flippedArrow, setFlippedArrow] = useState(false); // State to manage arrow flip
 
   const fetchCards = useCallback(() => {
-    axios.get(`https://api.pokemontcg.io/v2/cards?page=${page}&pageSize=${pageSize}`, {
+    const query = [];
+    if (searchTerm) query.push(`name:${searchTerm}`);
+    if (filterType) query.push(`types:${filterType}`);
+
+    console.log(`API Query: ${query.join(' ')}`);
+
+    axios.get(`https://api.pokemontcg.io/v2/cards`, {
+      params: {
+        q: query.join(' '),
+        pageSize: pageSize,
+        page: page
+      },
       headers: {
         'X-Api-Key': '4c4ccd02-c7c7-4101-b923-aec346474670'
       }
     })
     .then(response => {
-      setAllCards(prevCards => [...prevCards, ...response.data.data]);
-      setCards(prevCards => [...prevCards, ...response.data.data]);
-      if (response.data.data.length < pageSize) {
-        setHasMore(false);
+      console.log(`Fetched ${response.data.data.length} cards`);
+      if (page === 1) {
+        setAllCards(response.data.data);
+      } else {
+        setAllCards(prevCards => [...prevCards, ...response.data.data]);
       }
+      setHasMore(response.data.data.length >= pageSize);
     })
     .catch(error => {
       console.error("There was an error fetching the data!", error);
     });
-  }, [page]);
+  }, [searchTerm, filterType, page]);
 
   useEffect(() => {
     fetchCards();
   }, [fetchCards]);
 
+  // Apply filters and search
+  useEffect(() => {
+    console.log('Applying filters and search');
+    let filtered = allCards;
+    if (filterType) {
+      filtered = filtered.filter(card =>
+        card.types?.map(type => type.toLowerCase()).includes(filterType)
+      );
+    }
+    if (searchTerm) {
+      filtered = filtered.filter(card =>
+        card.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    console.log(`Filtered cards length: ${filtered.length}`);
+    setFilteredCards(filtered);
+  }, [allCards, filterType, searchTerm]);
+
   const handleSort = () => {
-    const sortedCards = [...cards].sort((a, b) => {
+    console.log(`Sorting cards in ${sortOrder} order`);
+    const sortedCards = [...filteredCards].sort((a, b) => {
       if (sortOrder === 'asc') {
         return a.name.localeCompare(b.name);
       } else {
         return b.name.localeCompare(a.name);
       }
     });
-    setCards(sortedCards);
+    setFilteredCards(sortedCards);
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
   const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+    const searchTerm = event.target.value.trim().toLowerCase(); // Trim and convert to lower case
+    console.log(`Setting search term: ${searchTerm}`);
+    setSearchTerm(searchTerm);
+    setPage(1); // Reset page when search term changes
   };
 
   const handleFilter = (event) => {
-    setFilterType(event.target.value.toLowerCase());
+    const selectedFilter = event.target.value.toLowerCase();
+    console.log(`Setting filter type: ${selectedFilter}`);
+    setFilterType(selectedFilter);
+    setPage(1); // Reset page when filter type changes
   };
-
-  useEffect(() => {
-    const filtered = allCards.filter(card =>
-      card.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterType === '' || card.types?.map(type => type.toLowerCase()).includes(filterType))
-    );
-    setCards(filtered);
-  }, [searchTerm, filterType, allCards]);
 
   const { ref, inView } = useInView({
     threshold: 0.5,
@@ -76,6 +106,7 @@ const PokemonList = () => {
 
   useEffect(() => {
     if (inView && hasMore) {
+      console.log('In view and has more cards to load');
       setPage(prevPage => prevPage + 1);
     }
   }, [inView, hasMore]);
@@ -105,21 +136,21 @@ const PokemonList = () => {
     <div className="pokemon-list-container">
       <div className="controls">
         <div className='searchbar'>
-            <input type="text" placeholder="Search..." value={searchTerm} onChange={handleSearch} />
+          <input type="text" placeholder="Search..." value={searchTerm} onChange={handleSearch} />
         </div>
         <select className="filter-select" onChange={handleFilter}>
           <option value="">All Types</option>
-          <option value="Grass">Grass</option>
-          <option value="Fire">Fire</option>
-          <option value="Water">Water</option>
-          <option value="Darkness">Dark</option>
-          <option value="Psychic">Psychic</option>
-          <option value="Colorless">Normal</option>
-          <option value="Fighting">Fighting</option>
-          <option value="Lightning">Electric</option>
-          <option value="Metal">Steel</option>
-          <option value="Fairy">Fairy</option>
-          <option value="Dragon">Dragon</option>
+          <option value="grass">Grass</option>
+          <option value="fire">Fire</option>
+          <option value="water">Water</option>
+          <option value="darkness">Dark</option>
+          <option value="psychic">Psychic</option>
+          <option value="colorless">Normal</option>
+          <option value="fighting">Fighting</option>
+          <option value="lightning">Electric</option>
+          <option value="metal">Steel</option>
+          <option value="fairy">Fairy</option>
+          <option value="dragon">Dragon</option>
         </select>
         <div className="order-by">
           <span>Order By:</span>
@@ -129,7 +160,7 @@ const PokemonList = () => {
         </div>
       </div>
       <div className="pokemon-list">
-        {cards.map((card) => (
+        {filteredCards.map((card) => (
           <PokemonCard 
             key={card.id} 
             name={card.name} 
